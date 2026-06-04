@@ -271,7 +271,7 @@ tmux_conf_theme_right_separator_sub="|"
 #     - #{username_ssh}
 tmux_conf_theme_status_left=""
 #tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} | #{pretty_pane_current_path} "
-tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized} , %d %b | %R | #{username}#{root} | #{hostname} "
+tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized} , %d %b | %R | #{@whoami} | #h "
 
 # status left style
 tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_7,$tmux_conf_theme_colour_8"
@@ -406,6 +406,10 @@ unbind -n C-l
 
 # use zsh inside tmux when it's installed, fall back to the login shell elsewhere
 run-shell 'command -v zsh >/dev/null 2>&1 && tmux set -g default-shell "$(command -v zsh)" || true'
+
+# expose the current user as #{@whoami} for the status bar (native, instant;
+# avoids oh-my-tmux's #{username} which can break depending on the platform)
+run-shell 'tmux set -g @whoami "$(whoami)"'
 
 # if you don't want Oh my tmux! to alter a binding or a setting, use #!important
 # bind c new-window -c '#{pane_current_path}' #!important
