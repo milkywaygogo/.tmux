@@ -387,7 +387,7 @@ tmux_conf_urlscan_options="--compact --dedupe"
 set -g history-limit 10000
 
 # start with mouse mode enabled
-#set -g mouse on
+set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
@@ -406,6 +406,10 @@ unbind -n C-l
 
 # use zsh inside tmux when it's installed, fall back to the login shell elsewhere
 run-shell 'command -v zsh >/dev/null 2>&1 && tmux set -g default-shell "$(command -v zsh)" || true'
+
+# start panes as NON-login shells so macOS /etc/zprofile's path_helper doesn't
+# reorder PATH and shove conda/miniconda behind /usr/bin (which broke `python3`)
+set -g default-command "${SHELL}"
 
 # expose the current user as #{@whoami} for the status bar (native, instant;
 # avoids oh-my-tmux's #{username} which can break depending on the platform)
